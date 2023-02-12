@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <nav class="bg-gray-800 p-2 flex items-center justify-between">
+        <div class="flex items-center">
+          <a href="#" class="text-white font-bold">
+            Itachi
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="#" class="text-white mr-4 hover:text-gray-500">
+            Home
+          </a>
+          <a href="#" class="text-white mr-4 hover:text-gray-500">
+            About
+          </a>
+          <a href="#" class="text-white mr-4 hover:text-gray-500">
+            Services
+          </a>
+          <a href="#" class="text-white hover:text-gray-500">
+            Contact
+          </a>
+        </div>
+      </nav>
+      
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #video-container {
+            position: relative;
+          }
+    
+          #video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: move;}
+        .star {
+            position: fixed;
+            font-size: 20px;
+            color: rgb(227, 227, 198);
+            transition: all 0.ms ease-out;
+            opacity: 1;}
+      .snowflake {
+        position: absolute;
+        top: -50px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        width: 20px;
+        height: 20px;
+        background-image: url("https://scontent.fdac41-1.fna.fbcdn.net/v/t39.30808-6/330237203_578733417195777_3044500507910186235_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeEy7Tv9Mj6e8WgbAWkT2HpkpDJdesr0sN-kMl16yvSw32SLHM4N5j7MnF6nFbore0j02aBvf0H9RrIJdR3LGTyk&_nc_ohc=S6-w5Hdtr3cAX_qqYG9&tn=6JSn-6mU7WadUW_x&_nc_ht=scontent.fdac41-1.fna&oh=00_AfBT6p9na0rULeBeMW5atAPBs99Vhv0q4c7cUsWBaX5q3w&oe=63EDB524");
+        background-size: cover;
+        animation: fall 1s ease-in-out infinite;
+        opacity: 0;
+      }
+      @keyframes fall {
+        0% {
+          transform: translateY(-100%) rotate(0deg);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(100%) rotate(360deg);
+          opacity: 1;
+        }
+      }
+    </style>
+    <title>Snowfall Effect</title>
+  </head>
+  <body class="bg-gray-900" style="background-image: url(https://scontent.fdac41-1.fna.fbcdn.net/v/t39.30808-6/330237203_578733417195777_3044500507910186235_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeEy7Tv9Mj6e8WgbAWkT2HpkpDJdesr0sN-kMl16yvSw32SLHM4N5j7MnF6nFbore0j02aBvf0H9RrIJdR3LGTyk&_nc_ohc=S6-w5Hdtr3cAX_qqYG9&tn=6JSn-6mU7WadUW_x&_nc_ht=scontent.fdac41-1.fna&oh=00_AfBT6p9na0rULeBeMW5atAPBs99Vhv0q4c7cUsWBaX5q3w&oe=63EDB524);">
+    <div id="video-container">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/xYKzdx-B1w0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+    <div class="container mx-auto px-6 py-10">
+      <div class="relative">
+        <div class="snowflake absolute"></div>
+        <div class="snowflake absolute"></div>
+        <div class="snowflake absolute"></div>
+        <div class="snowflake absolute"></div>
+        <div class="snowflake absolute"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const snowflakes = document.querySelectorAll(".snowflake");
+    snowflakes.forEach(snowflake => {
+      let x = Math.floor(Math.random() * window.innerWidth);
+      let y = Math.floor(Math.random() * window.innerHeight);
+      let duration = Math.floor(Math.random() * 5 + 5);
+      snowflake.style.left = x + "px";
+      snowflake.style.top = y + "px";
+      snowflake.style.animationDuration = duration + "s";
+      window.addEventListener("mousemove", function(event) {
+        var star = document.createElement("div");
+        star.style.top = event.clientY + "px";
+        star.style.left = event.clientX + "px";
+        star.classList.add("star");
+        star.innerHTML = "&#9733;";
+        document.body.appendChild(star);
+
+        setTimeout(function() {
+          star.style.opacity = 0;
+        }, 500);
+
+        setTimeout(function() {
+          document.body.removeChild(star);
+        }, 1500);
+      });
+      
+    });
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    const video = document.getElementById("video");
+
+    video.addEventListener("mousedown", dragStart);
+    video.addEventListener("mouseup", dragEnd);
+    video.addEventListener("mouseout", dragEnd);
+    video.addEventListener("mousemove", drag);
+
+    function dragStart(e) {
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+
+      video.style.top = initialY + "px";
+      video.style.left = initialX + "px";
+
+      isDragging = true;
+    }
+
+    function dragEnd(e) {
+      initialX = currentX;
+      initialY = currentY;
+
+      isDragging = false;
+    }
+
+    function drag(e) {
+      if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        video.style.top = currentY + "px";
+        video.style.left = currentX + "px";
+      }
+    }
+
+  </script>
+</html>
